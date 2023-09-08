@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{public/fragment :: head_file}"/>
+
+
+<body>
+
+<!--  Header-->
+<header th:replace="~{public/fragment :: header}"/>
+
+<!-- Header end-->
+
+<nav aria-label="breadcrumb" class="w-100 float-left">
+    <ol class="breadcrumb parallax justify-content-center" data-source-url="/img/banner/parallax.jpg"
+        style="background-image: url(&quot;img/banner/parallax.jpg&quot;); background-position: 50% 0.809717%;">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">cart</li>
+
+    </ol>
+</nav>
+
+<div class="cart-area table-area pt-110 pb-95 float-left w-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-12 col-sm-12 float-left cart-wrapper">
+                <div class="table-responsive">
+                    <table class="table product-table text-center">
+                        <thead>
+                        <tr>
+                            <th class="table-remove text-capitalize">choose</th>
+                            <th class="table-remove text-capitalize">remove</th>
+                            <th class="table-image text-capitalize">image</th>
+                            <th class="table-p-name text-capitalize">product</th>
+                            <th class="table-p-price text-capitalize">price</th>
+                            <th class="table-p-qty text-capitalize">quantity</th>
+                            <th class="table-total text-capitalize">total</th>
+                        </tr>
+                        </thead>
+                        <tbody th:each="item:${cart.items}">
+                        <tr>
+                            <td>
+                                <label for="choose-item"></label><input class="choose-item" onchange="check()" th:value="${item.id}" type="checkbox"/>
+                            </td>
+                            <td class="table-remove">
+                                <button th:onclick="removeProduct([[${item.id}]])"><i class="material-icons">delete</i>
+                                </button>
+                            </td>
+                            <td class="table-image"><a th:href="${'/product/'+item.product.pid}"><img
+                                    th:src="@{${item.product.productImage[0].imageUrl}}" alt=""></a></td>
+                            <td class="table-p-name text-capitalize"><a th:href="${'/product/'+item.product.pid}"
+                                                                        th:text="${item.product.productName}"></a></td>
+                            <td class="table-p-price"><p th:text="${#numbers.formatCurrency(item.product.price)}"></p>
+                            </td>
+                            <td class="table-p-qty"><input th:value="${item.quantity}" value="1" name="cart-qty"
+                                                           type="number"></td>
+                            <td class="table-total"><p
+                                    th:text="${#numbers.formatCurrency(item.quantity * item.product.price)}"></p></td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-bottom-wrapper">
+                    <div class="table-coupon d-flex d-xs-block d-lg-flex d-sm-flex fix justify-content-start float-left">
+                        <input type="text" placeholder="Coupon code">
+                        <button type="submit" class="btn-primary btn">Apply coupon</button>
+                    </div>
+                    <div class="table-update d-flex d-xs-block d-lg-flex d-sm-flex justify-content-end">
+                        <button type="button" class="btn-primary btn">Update cart</button>
+                    </div>
+                </div>
+            </div>
+            <div class="table-total-wrapper d-flex justify-content-end pt-60 col-md-12 col-sm-12 col-lg-4 float-left  align-items-center">
+                <div class="table-total-content">
+                    <h2 class="pb-20">Cart totals</h2>
+                    <div class="table-total-amount">
+                        <div class="single-total-content d-flex justify-content-between float-left w-100">
+                            <strong>Subtotal</strong>
+                            <span class="c-total-price" id="sub-total"
+                                  th:text="${#numbers.formatCurrency(#aggregates.sum(cart.items.![quantity*product.price] ))}"></span>
+                        </div>
+                        <div class="single-total-content d-flex justify-content-between float-left w-100">
+                            <strong>Shipping</strong>
+                            <span class="c-total-price"><span>Flat Rate:</span> 5000</span>
+                        </div>
+                        <div class="single-total-content d-flex justify-content-end float-left w-100">
+                            <a href="#">Calculate shipping</a>
+                        </div>
+                        <div class="single-total-content tt-total d-flex justify-content-between float-left w-100">
+                            <strong>Total</strong>
+                            <span class="c-total-price"
+                                  th:text="${#numbers.formatCurrency(#aggregates.sum(cart.items.![quantity*product.price] ) +5000)}"></span>
+                        </div>
+                        <button id="btn-checkout" onclick="checkout()" class="btn btn-primary float-left w-100 text-center">Proceed to
+                            checkout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Footer -->
+<div class="block-newsletter">
+    <div class="parallax" data-source-url="/img/banner/parallax.jpg"
+         style="background-image:url(/img/banner/parallax.jpg); background-position:50% 65.8718%;">
+        <div class="container">
+            <div class="tt-newsletter col-sm-7">
+                <h2 class="text-uppercase">Subscribe to our Newsletter</h2>
+            </div>
+            <div class="block-content col-sm-5">
+                <form method="post" action="contact-us.html">
+                    <div class="input-group">
+                        <input type="email" name="email" value="" placeholder="Email address.." required=""
+                               class="form-control">
+                        <span class="input-group-btn">
+			 <button class="btn btn-theme text-uppercase btn-primary" type="submit">Subscribe</button>
+			 </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{public/fragment :: footer}"/>
+<!-- Footer -->
+
+<!-- Register modal -->
+<div th:replace="~{public/fragment :: registerModal}"></div>
+
+<!-- Login modal -->
+<div th:replace="~{public/fragment :: loginModal}"></div>
+
+<!-- product_view modal -->
+<div th:replace="~{public/fragment :: productViewModal}"></div>
+
+<!-- cart-pop modal -->
+<div th:replace="~{public/fragment :: cartPopModal}"></div>
+
+<th:block th:replace="~{public/fragment :: script}">
+</th:block>
+
+
+
+
+<script>
+    var names = [];
+    function check(){
+        var checkouts = document.getElementsByClassName('choose-item');
+        var subTotal = document.getElementById("sub-total");
+
+        for (var i =0; i < checkouts.length; i++){
+
+            if (checkouts[i].checked){
+
+                names.push(checkouts[i].value)
+
+            }
+            const sum = names.reduce((partialSum, a) => partialSum + a, 0);
+            console.log(sum);
+        }
+
+    }
+   /* function checkout(){
+        var checkout = document.getElementsByClassName('choose-item');
+
+
+        console.log(names)
+    }*/
+</script>
+</body>
+</html>
+
+
+
