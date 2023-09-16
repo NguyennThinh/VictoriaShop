@@ -32,12 +32,13 @@ public class Product {
     private int quantitySold;
 
 
-    @JsonIgnore
+    private List<Address> address;
+
     private Category category;
-    @JsonIgnore
+
     private Sale sale;
 
-    private List<Color> colors;
+
 
     private List<Review> reviews;
 }

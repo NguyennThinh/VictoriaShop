@@ -1,0 +1,359 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{public/fragment :: head_file}"></head>
+<body id="category" class="category">
+
+<!--  Header-->
+<header th:replace="~{public/fragment :: header}"></header>
+<!-- Header end-->
+<nav aria-label="breadcrumb" class="w-100 float-left">
+    <ol class="breadcrumb parallax justify-content-center" data-source-url="img/banner/parallax.jpg"
+        style="background-image: url(&quot;img/banner/parallax.jpg&quot;); background-position: 50% 0.809717%;">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page" th:text="${param.type}"></li>
+    </ol>
+</nav>
+<div class="main-content w-100 float-left">
+    <div class="container">
+        <div class="row">
+            <div class="content-wrapper filter-toggle col-xl-12 col-lg-12 order-lg-2">
+                <div class="block-category mb-30 w-100 float-left">
+                    <div class="category-cover">
+                        <img src="/img/banner/category-banner.png" alt="category-banner"/>
+                    </div>
+                    <div class="title-category text-capitalize">women</div>
+                    <div class="category-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
+                        sagittis, magna et euismod auctor, mauris ipsum interdum risus, a varius augue lacus id diam.
+                        Mauris maximus, ipsum at gravida sodales, purus tellus tempor eros, a feugiat elit odio in nunc.
+                    </div>
+                </div>
+                <header class="product-grid-header d-flex d-xs-block d-sm-flex d-lg-flex w-100 float-left">
+                    <div class="hidden-sm-down total-products d-flex d-xs-block d-lg-flex col-md-3 col-sm-3 col-xs-10 align-items-center float-left">
+                        <div class="row">
+                            <div class="nav" role="tablist">
+                                <a class="grid active" href="#grid" data-toggle="tab" role="tab" aria-selected="true"
+                                   aria-controls="grid"><i class="material-icons align-middle">grid_on</i></a>
+                                <a class="list" href="#list" data-toggle="tab" role="tab" aria-selected="false"
+                                   aria-controls="list"><i class="material-icons align-middle">format_list_bulleted</i></a>
+                                <a class="sort" href="#sort-view" data-toggle="tab" role="tab" aria-selected="false"
+                                   aria-controls="sort-view"><i class="material-icons align-middle">reorder</i></a>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </header>
+
+                <div class="tab-content text-center products w-100 float-left">
+                    <div class="tab-pane grid fade active" id="grid" role="tabpanel">
+                        <div class="row" >
+
+                            <th:block th:each="p :${products}">
+                                <div class="product-layouts col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                    <div class="product-thumb">
+                                        <div class="image zoom">
+                                            <a th:href="@{'/product/'+${p.pid}}">
+                                                <img th:src="${p.productImage[0].imageUrl}" alt="01"/>
+                                                <img th:src="${p.productImage[1].imageUrl}" alt="02"
+                                                     class="second_image img-responsive"/> </a>
+
+                                        </div>
+                                        <div class="thumb-description">
+                                            <div class="caption">
+                                                <h4 class="product-title text-capitalize"><a th:href="@{'/product/'+${p.pid}}" th:text="${p.productName}"></a></h4>
+                                            </div>
+                                            <div class="rating">
+                                                <div class="product-ratings d-inline-block align-middle">
+                                                    <span class="fa fa-stack"><i class="material-icons">star</i></span>
+                                                    <span class="fa fa-stack"><i class="material-icons">star</i></span>
+                                                    <span class="fa fa-stack"><i class="material-icons">star</i></span>
+                                                    <span class="fa fa-stack"><i class="material-icons off">star</i></span>
+                                                    <span class="fa fa-stack"><i class="material-icons off">star</i></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="price">
+                                                <div class="regular-price" th:if="${p.sale == null}" th:text="${#numbers.formatCurrency(p.price)}"></div>
+                                                <div class="regular-price" th:if="${p.sale != null}" th:text="${#numbers.formatCurrency(p.price - (p.price * p.sale.saleValue/100))}"></div>
+                                                <div class="old-price" th:if="${p.sale != null}"  th:text="${#numbers.formatCurrency(p.price)}"></div>
+                                            </div>
+                                            <div class="button-wrapper">
+                                                <div class="button-group text-center">
+                                                    <button type="button" class="btn btn-primary btn-cart"
+                                                            th:onclick="addToCart([[${p}]])"
+                                                            data-target="#cart-pop" data-toggle="modal" ><i
+                                                            class="material-icons">shopping_cart</i><span>Out of stock</span>
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade list text-left" id="list" role="tabpanel">
+                 <th:block th:each="p : ${products}">
+                     <div class="product-layouts col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                         <div class="product-thumb row">
+                             <div class="image zoom col-xs-12 col-sm-5 col-md-4">
+
+                                 <a th:href="@{'/product/'+${p.pid}}" class="d-block position-relative">
+                                     <img th:src="${p.productImage[0].imageUrl}"  alt="01"/>
+                                     <img th:src="${p.productImage[1].imageUrl}" alt="02" class="second_image img-responsive"/>
+                                 </a>
+
+                             </div>
+                             <div class="thumb-description col-xs-12 col-sm-7 col-md-8 position-static text-left">
+                                 <div class="caption">
+                                     <h4 class="product-title text-capitalize">
+                                         <a th:href="@{'/product/'+${p.pid}}" th:text="${p.productName}" /> </h4>
+                                 </div>
+                                 <div class="rating mb-10">
+                                     <div class="product-ratings d-inline-block align-middle">
+                                         <span class="fa fa-stack"><i class="material-icons">star</i></span>
+                                         <span class="fa fa-stack"><i class="material-icons">star</i></span>
+                                         <span class="fa fa-stack"><i class="material-icons">star</i></span>
+                                         <span class="fa fa-stack"><i class="material-icons off">star</i></span>
+                                         <span class="fa fa-stack"><i class="material-icons off">star</i></span>
+                                     </div>
+                                 </div>
+
+                                 <div class="description" th:text="${p.description}" style="height: 150px; overflow: clip">
+
+                                 </div>
+
+                                 <div class="price">
+                                     <div class="regular-price" th:if="${p.sale == null}" th:text="${#numbers.formatCurrency(p.price)}"></div>
+                                     <div class="regular-price" th:if="${p.sale != null}" th:text="${#numbers.formatCurrency(p.price - (p.price * p.sale.saleValue/100))}"></div>
+                                     <div class="old-price" th:if="${p.sale != null}"  th:text="${#numbers.formatCurrency(p.price)}"></div>
+                                 </div>
+                                 <div class="button-wrapper">
+                                     <div class="button-group text-center">
+                                         <button type="button" class="btn btn-primary btn-cart"
+                                                 th:onclick="addToCart([[${p}]])"
+                                                 data-target="#cart-pop" data-toggle="modal" ><i
+                                                 class="material-icons">shopping_cart</i><span>out of stock</span>
+                                         </button>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </th:block>
+
+
+                    </div>
+                    <div class="tab-pane fade sort text-left" id="sort-view" role="tabpanel">
+
+                        <th:block th:each="p :${products}">
+
+                            <div class="product-layouts">
+                                <div class="product-thumb row">
+                                    <div class="image zoom col-xs-12 col-sm-3 col-md-2">
+
+                                        <a th:href="@{'/product/'+${p.pid}}" class="d-block position-relative">
+                                            <img th:src="${p.productImage[0].imageUrl}" alt="01"/>
+                                            <img th:src="${p.productImage[1].imageUrl}"  alt="02" class="second_image img-responsive"/>
+                                        </a>
+
+                                    </div>
+                                    <div class="thumb-description col-xs-12 col-sm-9 col-md-10 position-static text-left">
+                                        <div class="sort-title col-md-5 col-sm-7 float-left">
+                                            <div class="caption">
+                                                <h4 class="product-title text-capitalize"><a href="product-details.html">aliquam
+                                                    quaerat voluptatem</a></h4>
+                                            </div>
+
+                                            <div class="rating mb-10">
+                                                <div class="product-ratings d-inline-block align-middle">
+                                                    <span class="fa fa-stack"><i class="material-icons">star</i></span>
+                                                    <span class="fa fa-stack"><i class="material-icons">star</i></span>
+                                                    <span class="fa fa-stack"><i class="material-icons">star</i></span>
+                                                    <span class="fa fa-stack"><i class="material-icons off">star</i></span>
+                                                    <span class="fa fa-stack"><i class="material-icons off">star</i></span>
+                                                </div>
+                                            </div>
+                                            <div class="description mb-10" th:text="${p.description}" style="height: 150px; overflow: clip">
+
+                                            </div>
+                                            <div class="color-option d-flex align-items-center float-left w-100">
+                                                <ul class="color-categories">
+                                                    <li>
+                                                        <a class="tt-pink" href="#" title="Pink"></a></li>
+                                                    <li>
+                                                        <a class="tt-blue" href="#" title="Blue"></a></li>
+                                                    <li>
+                                                        <a class="tt-yellow" href="#" title="Yellow"></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="price-main col-md-3 col-sm-5 float-left text-center text-sm-center text-xs-left">
+                                            <div class="price">
+                                                <div class="regular-price" th:if="${p.sale == null}" th:text="${#numbers.formatCurrency(p.price)}"></div>
+                                                <div class="regular-price" th:if="${p.sale != null}" th:text="${#numbers.formatCurrency(p.price - (p.price * p.sale.saleValue/100))}"></div>
+                                                <div class="old-price" th:if="${p.sale != null}"  th:text="${#numbers.formatCurrency(p.price)}"></div>
+                                            </div>
+                                        </div>
+                                        <div class="button-wrapper col-md-4 col-sm-5 float-left text-center text-md-center text-sm-center text-xs-left">
+                                            <div class="button-group text-center">
+                                                <button type="button" class="btn btn-primary btn-cart"
+                                                        th:onclick="addToCart([[${p}]])"
+                                                        data-target="#cart-pop" data-toggle="modal" ><i
+                                                        class="material-icons">shopping_cart</i><span>out of stock</span>
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+
+
+                    </div>
+                </div>
+                <div class="pagination-wrapper float-left w-100">
+                    <p>Showing 1 to 9 of 11 (2 Pages)</p>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            <th:block th:each="page , i : ${totalPage}">
+                                <li th:class="'page-item '+ ${param.page == i ? 'active':''}">
+                                    <a class="page-link" th:href="@{/product/shop(type=${param.type}, page=${i.index+1})}" th:text="${i.index+1}"></a
+                                    ></li>
+                            </th:block>
+
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Footer -->
+<div class="block-newsletter">
+    <div class="parallax" data-source-url="img/banner/parallax.jpg"
+         style="background-image:url(img/banner/parallax.jpg); background-position:50% 65.8718%;">
+        <div class="container">
+            <div class="tt-newsletter col-sm-7">
+                <h2 class="text-uppercase">Subscribe to our Newsletter</h2>
+            </div>
+            <div class="block-content col-sm-5">
+                <form method="post" action="contact-us.html">
+                    <div class="input-group">
+                        <input type="email" name="email" value="" placeholder="Email address.." required=""
+                               class="form-control">
+                        <span class="input-group-btn">
+			 <button class="btn btn-theme text-uppercase btn-primary" type="submit">Subscribe</button>
+			 </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="~{public/fragment :: footer}"></footer>
+<!-- Footer -->
+
+
+<!-- Register modal -->
+<div th:replace="~{public/fragment :: registerModal}"></div>
+
+<!-- Login modal -->
+<div th:replace="~{public/fragment :: loginModal}"></div>
+
+<!-- product_view modal -->
+<div th:replace="~{public/fragment :: productViewModal}"></div>
+
+
+<th:block th:replace="~{public/fragment :: script}">
+</th:block>
+
+
+<script th:inline="javascript">
+
+    function addToCart(product) {
+
+        var authorization = [[${authorization}]];
+        var totalProduct = product.quantity
+        console.log(totalProduct)
+        if (authorization == null) {
+
+            $('#modalLoginForm').modal('show')
+
+        }   else {
+
+            postProduct(product);
+        }
+
+
+    }
+    function postProduct(product) {
+        const formatter = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+
+        var pid = product.pid
+
+
+        var formData = new FormData();
+
+
+        formData.append("pid", pid);
+        formData.append("qty", 1);
+        formData.append("url", window.location.href)
+
+
+        $.ajax({
+            url: '/cart/add-to-cart',
+            data: formData,
+            type: 'post',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                document.getElementById('cart-size').innerText =parseInt(document.getElementById('cart-size').innerText)+1   ;
+                alertify.set('notifier','position', 'top-left');
+                alertify.success('Đã thêm sản phẩm vào giỏ hàng');
+            },
+            error: function (error) {
+                console.log("error");
+                console.log(error);
+            }
+        })
+    }
+
+
+
+
+
+
+</script>
+
+
+</body>
+</html>
+
+
+
+

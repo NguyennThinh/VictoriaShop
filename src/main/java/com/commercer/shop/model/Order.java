@@ -20,5 +20,11 @@ public class Order {
     private List<OrderItem> items;
     private User user;
 
+    private Address address;
+
     private int status;
+
+    private String paymentMethod;
+
+    private String dateOrder;
 }

@@ -16,7 +16,7 @@ public class WebClientConfig {
     @Bean
     public WebClient webClient(){
         webClient = WebClient.create(restUrl);
-        System.out.println(restUrl);
+     ;
         return webClient;
     }
 }

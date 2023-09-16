@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @NoArgsConstructor
@@ -19,11 +20,9 @@ public class Sale {
 
     private int saleValue;
 
-    private String startDate;
+    private Date startDate;
 
-    private String endDate;
-
-    private boolean status;
+    private Date endDate;
 
     private List<Product> productsSale;
 }

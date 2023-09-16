@@ -4,9 +4,10 @@ import com.commercer.shop.model.User;
 import com.commercer.shop.model.dto.Account;
 import com.commercer.shop.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -19,7 +20,7 @@ public class AuthDaoImpl implements AuthService {
 
     @Autowired
     private WebClient webClient;
-    private ClientResponse.Headers headers;
+
 
     @Override
     public User register(Account account) {

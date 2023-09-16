@@ -110,6 +110,11 @@ $(document).ready(function() {
 		$("#different-address-main").on("change", function() {
 		$("#checkout-shipping-address-diff").toggleClass("show")
 	});
+	$("#checkbox-card-home").on("change", function() {
+		$("#card-dropdown").removeClass("show");
+		$("#card-dropdown-debit").removeClass("show");
+		$("#card-dropdown-paypal").removeClass("show");
+	});
 	/*--- review scroll js ----*/					   
     $('.review-down').on('click', function() {
         $('html, body').animate({scrollTop: $('.product-tab-area .tabs #tab2').offset().top - 100 }, 'slow');

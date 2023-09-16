@@ -27,90 +27,69 @@
 	</div>
 
 <div id="order-itens" class="card float-left w-100 mb-10">
-		<div class="card-block p-20">
-			<h3 class="card-title">order items</h3>
-			<div class="order-confirmation-table float-left w-100">
-			<div class="order-line float-left w-100">
-				<div class="row">
-				<div class="col-sm-1 col-xs-3 float-left">
-				<img src="img/products/02.jpg" alt="">
+			<th:block th:each="order: ${orders}">
+				<div class="card-block p-20">
+					<h3 class="card-title"th:text="${order.dateOrder}">order items</h3>
+					<div class="order-confirmation-table float-left w-100">
+						<div class="order-line float-left w-100" th:each="item:${order.items}">
+							<div class="row">
+								<div class="col-sm-1 col-xs-3 float-left">
+									<img th:src="${item.product.productImage[0].imageUrl}" alt="">
+								</div>
+								<div class="col-sm-5 col-xs-9 details float-left">
+									<span th:text="${item.product.productName}"></span>
+								</div>
+								<div class="col-sm-6 col-xs-12 qty float-left d-flex">
+									<div class="col-xs-5 col-sm-5 text-sm-right text-xs-left" th:text="${#numbers.formatCurrency(item.product.price)}"></div>
+									<div class="col-xs-2 col-sm-2" th:text="${item.quantity}"></div>
+									<div class="col-xs-5 col-sm-5 text-sm-right bold" th:text="${item.product.price * item.quantity}"></div>
+								</div>
+							</div>
+
+
+						</div>
+						<hr class="float-left w-100">
+						<table class="float-left w-100 mb-30">
+							<tbody><tr class="mb-10">
+								<td>Subtotal</td>
+								<td class="text-right" th:text="${#numbers.formatCurrency(#aggregates.sum(order.items.![quantity*product.price] ))}"></td>
+							</tr>
+							<tr class="mb-10">
+								<td>Shipping and handling</td>
+								<td class="text-right" id="ship-price" th:text="${#numbers.formatCurrency(50000)}"></td>
+							</tr>
+							<tr class="font-weight-bold">
+								<td><span class="text-uppercase">Total</span> (tax excl.)</td>
+								<td class="text-right" th:text="${#numbers.formatCurrency(#aggregates.sum(order.items.![quantity*product.price] ) +50000)}"></td>
+							</tr>
+							</tbody></table>
+						<div id="order-details" class="float-left w-100">
+							<h3 class="h3 card-title">Order details:</h3>
+							<ul>
+								<li>Order reference: <strong th:text="${order.code}"></strong></li>
+								<li>Order status: <strong th:if="${order.status == 0}" > Đang chuẩn bị</strong>
+								 <strong th:if="${order.status == 1}" > Đang giao hàng</strong>
+								 <strong th:if="${order.status == 2}" > Đã hoàn thành</strong>
+								<strong th:if="${order.status == -1}" > Đã hủy</strong></li>
+
+								<li>Payment method: <strong th:text="${order.paymentMethod}"></strong></li>
+							<!--	<li>
+									Shipping method: Demo Store<br>
+									<em>Pick up in-store</em>
+								</li>-->
+							</ul>
+						</div>
+
+					</div>
 				</div>
-				<div class="col-sm-5 col-xs-9 details float-left">
-					<span>aspetur autodit autfugit</span>
-				</div>
-				<div class="col-sm-6 col-xs-12 qty float-left d-flex">
-				  <div class="col-xs-5 col-sm-5 text-sm-right text-xs-left">$100.00</div>
-				  <div class="col-xs-2 col-sm-2">1</div>
-				  <div class="col-xs-5 col-sm-5 text-sm-right bold">$100.00</div>
-				</div>
-				</div>
-			</div>
-			<hr class="float-left w-100">
-			<table class="float-left w-100 mb-30">
-                              <tbody><tr class="mb-10">
-              <td>Subtotal</td>
-              <td class="text-right">$100.00</td>
-            </tr>
-                                                         <tr class="mb-10">
-              <td>Shipping and handling</td>
-              <td class="text-right">$7.00</td>
-            </tr>
-                                                                      <tr class="font-weight-bold">
-          <td><span class="text-uppercase">Total</span> (tax excl.)</td>
-          <td class="text-right">$107.00</td>
-        </tr>
-      </tbody></table>
-<div id="order-details" class="float-left w-100">
-            <h3 class="h3 card-title">Order details:</h3>
-            <ul>
-              <li>Order reference: ZSMQIPYEH</li>
-              <li>Payment method: Bank transfer</li>
-                              <li>
-                  Shipping method: Demo Store<br>
-                  <em>Pick up in-store</em>
-                </li>
-                          </ul>
-          </div>
-		  
-			</div>
-		</div>
+
+			</th:block>
 	</div>
 <div id="content-hook_payment_return" class="card definition-list float-left w-100">
       <div class="card-block p-20">
         <div class="row">
           <div class="col-md-12">
-            
-    <p>
-      Your order on Demo Store is complete.<br>
-      Please send us a bank wire with:
-    </p>
-    
-
-<div class="order-content-main">
-	<div class="order-content mb-10">
-    <div>Amount</div>
-    <div>$107.00</div>
-	</div>
-	<div class="order-content mb-10">
-    <div>Name of account owner</div>
-    <div>___________</div>
-	</div>
-	<div class="order-content mb-10">
-    <div>Please include these details</div>
-    <div>___________</div>
-	</div>
-		<div class="order-content mb-10">
-    <div>Bank name</div>
-    <div>___________</div>
-	</div>
-</div>
-
-
-    <p>
-      Please specify your order reference ZSMQIPYEH in the bankwire description.<br>
-      We've also sent you this information by e-mail.
-    </p>
-    <strong>Your order will be sent as soon as we receive payment.</strong>
+    <strong>Your order will be sent to you as soon as possible.</strong>
     <p>
       If you have questions, comments or concerns, please contact our <strong><a href="contact-us.html">expert customer support team</a></strong>
     </p>
@@ -154,8 +133,6 @@
 
 	<th:block th:replace="~{public/fragment :: script}">
 	</th:block>
-
-
 
   </body>
 </html>

@@ -18,6 +18,4 @@ public class ProductImage {
     @JsonIgnore
     private Product product;
 
-    @JsonIgnore
-    private Color color;
 }

@@ -5,17 +5,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Color {
+public class Address {
+
 
     private int id;
 
-    private String codeColor;
-    private String nameColor;
-    private List<ProductImage> productImages;
+    private String address;
+
+    private String country;
+
+    private String state;
+
+    private boolean isDefault;
+
+    private User user;
 }

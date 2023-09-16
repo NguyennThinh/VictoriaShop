@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{public/fragment :: head_file}"/>
+<head th:replace="~{public/fragment :: head_file}"></head>
 
 
 <body>
@@ -27,7 +27,6 @@
                     <table class="table product-table text-center">
                         <thead>
                         <tr>
-                            <th class="table-remove text-capitalize">choose</th>
                             <th class="table-remove text-capitalize">remove</th>
                             <th class="table-image text-capitalize">image</th>
                             <th class="table-p-name text-capitalize">product</th>
@@ -36,28 +35,28 @@
                             <th class="table-total text-capitalize">total</th>
                         </tr>
                         </thead>
-                        <tbody th:each="item:${cart.items}">
-                        <tr>
-                            <td>
-                                <label for="choose-item"></label><input class="choose-item" onchange="check()" th:value="${item.id}" type="checkbox"/>
-                            </td>
-                            <td class="table-remove">
-                                <button th:onclick="removeProduct([[${item.id}]])"><i class="material-icons">delete</i>
-                                </button>
-                            </td>
-                            <td class="table-image"><a th:href="${'/product/'+item.product.pid}"><img
-                                    th:src="@{${item.product.productImage[0].imageUrl}}" alt=""></a></td>
-                            <td class="table-p-name text-capitalize"><a th:href="${'/product/'+item.product.pid}"
-                                                                        th:text="${item.product.productName}"></a></td>
-                            <td class="table-p-price"><p th:text="${#numbers.formatCurrency(item.product.price)}"></p>
-                            </td>
-                            <td class="table-p-qty"><input th:value="${item.quantity}" value="1" name="cart-qty"
-                                                           type="number"></td>
-                            <td class="table-total"><p
-                                    th:text="${#numbers.formatCurrency(item.quantity * item.product.price)}"></p></td>
-                        </tr>
 
-                        </tbody>
+                            <tbody th:each="item:${cart.items}">
+                            <tr>
+
+                                <td class="table-remove">
+                                    <button th:onclick="removeProduct([[${item.id}]])"><i class="material-icons">delete</i>
+                                    </button>
+                                </td>
+                                <td class="table-image"><a th:href="${'/product/'+item.product.pid}"><img
+                                        th:src="@{${item.product.productImage[0].imageUrl}}" alt=""></a></td>
+                                <td class="table-p-name text-capitalize"><a th:href="${'/product/'+item.product.pid}"
+                                                                            th:text="${item.product.productName}"></a></td>
+                                <td class="table-p-price"><p th:text="${#numbers.formatCurrency(item.product.price)}"></p>
+                                </td>
+                                <td class="table-p-qty"><input th:value="${item.quantity}" value="1" name="cart-qty"
+                                                               type="number"></td>
+                                <td class="table-total"><p
+                                        th:text="${#numbers.formatCurrency(item.quantity * item.product.price)}"></p></td>
+                            </tr>
+
+                            </tbody>
+
                     </table>
                 </div>
                 <div class="table-bottom-wrapper">
@@ -81,18 +80,19 @@
                         </div>
                         <div class="single-total-content d-flex justify-content-between float-left w-100">
                             <strong>Shipping</strong>
-                            <span class="c-total-price"><span>Flat Rate:</span> 5000</span>
+                            <span class="c-total-price" id="ship-price"><span>Flat Rate:</span> 50000</span>
                         </div>
                         <div class="single-total-content d-flex justify-content-end float-left w-100">
                             <a href="#">Calculate shipping</a>
                         </div>
                         <div class="single-total-content tt-total d-flex justify-content-between float-left w-100">
                             <strong>Total</strong>
-                            <span class="c-total-price"
-                                  th:text="${#numbers.formatCurrency(#aggregates.sum(cart.items.![quantity*product.price] ) +5000)}"></span>
+                            <span class="c-total-price" id="total"
+
+                                  th:text="${#numbers.formatCurrency(#aggregates.sum(cart.items.![quantity*product.price] ) +50000)}"></span>
                         </div>
-                        <button id="btn-checkout" onclick="checkout()" class="btn btn-primary float-left w-100 text-center">Proceed to
-                            checkout</button>
+                        <a th:href="@{checkout-page}" id="btn-checkout"  class="btn btn-primary float-left w-100 text-center">Proceed to
+                            checkout</a>
                     </div>
                 </div>
             </div>
@@ -124,7 +124,7 @@
     </div>
 </div>
 
-<footer th:replace="~{public/fragment :: footer}"/>
+<footer th:replace="~{public/fragment :: footer}"></footer>
 <!-- Footer -->
 
 <!-- Register modal -->
@@ -145,30 +145,79 @@
 
 
 
-<script>
+<!--<script th:inline="javascript">
     var names = [];
-    function check(){
-        var checkouts = document.getElementsByClassName('choose-item');
-        var subTotal = document.getElementById("sub-total");
+    var items = [[${cart.items}]];
 
-        for (var i =0; i < checkouts.length; i++){
+    console.log(items)
+    var checkouts = document.getElementsByClassName('choose-item');
+    var subTotal = 0;
 
-            if (checkouts[i].checked){
 
-                names.push(checkouts[i].value)
 
-            }
-            const sum = names.reduce((partialSum, a) => partialSum + a, 0);
-            console.log(sum);
-        }
+    for (let i =0; i < checkouts.length; i++){
+        checkouts[i].addEventListener('change', changeItem)
 
     }
-   /* function checkout(){
-        var checkout = document.getElementsByClassName('choose-item');
+    function changeItem(e) {
+            if(e.target.checked){
+
+               names.push(e.target.value)
+
+                for (let i =0; i< items.length; i++){
+                    if(e.target.value == items[i].id){
+                        subTotal += (items[i].product.price * items[i].quantity)
+                    }
+                }
+
+            }else{
+                if (names.indexOf(e.target.value) !== -1) {
+                    names.splice(names.indexOf(e.target.value), 1);
+
+                    for (let i =0; i< items.length; i++){
+                        if(e.target.value == items[i].id){
+                            subTotal -= (items[i].product.price * items[i].quantity)
+
+                        }
+                    }
+                }
+
+            }
+        const formatter = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+            var total = subTotal+5000;
+        document.getElementById("sub-total").innerText =formatter.format(subTotal);
+        document.getElementById("total").innerText = formatter.format(total);
+    }
 
 
-        console.log(names)
-    }*/
+    function checkout(){
+        $.ajax({
+            url:"/cart/item-checkout",
+            type:'post',
+            data:{names},
+            success: function (e){
+            /*    sessionStorage.setItem('item', names);
+                sessionStorage.setItem('sub-total', subTotal);*/
+                window.location = "/cart/checkout-page"
+            },
+            error : function(e) {
+                alert('Error: ' + e);
+            }
+
+        })
+    }
+
+
+</script>-->
+<script>
+    const formatter = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    });
+    var ship = document.getElementById('ship-price').innerText = formatter.format(50000);
 </script>
 </body>
 </html>
